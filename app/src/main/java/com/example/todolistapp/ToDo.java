@@ -4,6 +4,10 @@ public class ToDo {
     String task;
     boolean checked;
 
+    public ToDo() {
+
+    }
+
     public ToDo(String task) {
         this.task = task;
         this.checked = false;

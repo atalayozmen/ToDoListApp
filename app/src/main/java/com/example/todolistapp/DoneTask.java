@@ -7,6 +7,9 @@ import java.io.Serializable;
 public class DoneTask implements Serializable {
     String taskName;
 
+    public DoneTask() {
+
+    }
 
 
     public DoneTask(String taskName) {

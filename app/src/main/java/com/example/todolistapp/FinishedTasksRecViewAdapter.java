@@ -1,6 +1,7 @@
 package com.example.todolistapp;
 
 import android.content.Context;
+import android.provider.ContactsContract;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
@@ -18,8 +19,8 @@ public class FinishedTasksRecViewAdapter extends RecyclerView.Adapter<FinishedTa
 
     ArrayList<DoneTask> finishedTasks = new ArrayList<>();
 
-    public void setFinishedTasks() {
-        this.finishedTasks = ArrayListHolder.finishedTasks;
+    public void setFinishedTasks(ArrayList<DoneTask> finishedTasks) {
+        this.finishedTasks = finishedTasks;
 
     }
 
@@ -38,7 +39,7 @@ public class FinishedTasksRecViewAdapter extends RecyclerView.Adapter<FinishedTa
 
     @Override
     public void onBindViewHolder(@NonNull ViewHolder holder, int position) {
-            holder.doneTask.setText(ArrayListHolder.getFinishedTask().get(position).getTaskName());
+            holder.doneTask.setText(finishedTasks.get(position).getTaskName());
             System.out.println("bind");
     }
 
@@ -53,7 +54,7 @@ public class FinishedTasksRecViewAdapter extends RecyclerView.Adapter<FinishedTa
 
 
     public void clearFinishedTasks(){
-        ArrayListHolder.finishedTasks.clear();
+        finishedTasks.clear();
         notifyDataSetChanged();
     }
 

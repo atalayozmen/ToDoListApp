@@ -6,6 +6,7 @@ import androidx.recyclerview.widget.GridLayoutManager;
 import androidx.recyclerview.widget.LinearLayoutManager;
 import androidx.recyclerview.widget.RecyclerView;
 
+import android.content.Context;
 import android.content.Intent;
 import android.os.Bundle;
 import android.text.TextUtils;
@@ -23,6 +24,9 @@ public class MainActivity extends AppCompatActivity {
 
     TodolistRecViewAdapter adapter;
 
+    Context context;
+
+
     private ConstraintLayout parent;
     private Button addBtn;
     private EditText editText;
@@ -31,12 +35,14 @@ public class MainActivity extends AppCompatActivity {
 
     private RecyclerView todolistRecView;
     ArrayList<DoneTask> finishedTasks = new ArrayList<>();
+    ArrayList<ToDo> tasks = new ArrayList<>();
 
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_main);
+
 
 
 
@@ -49,16 +55,16 @@ public class MainActivity extends AppCompatActivity {
         todolistRecView = findViewById(R.id.todolistRecView);
 
 
-        ArrayList<ToDo> tasks = new ArrayList<>();
 
 
-        ToDo taskToDo = new ToDo("Atalay");
-
-        tasks.add(taskToDo);
-
-        adapter = new TodolistRecViewAdapter(this);
 
 
+
+        adapter = new TodolistRecViewAdapter();
+
+
+        DataBaseHelper dataBaseHelper = new DataBaseHelper(this);
+        tasks = (ArrayList) dataBaseHelper.getAllTasksToDoFromDB();
 
         adapter.setTasks(tasks);
 
@@ -75,10 +81,6 @@ public class MainActivity extends AppCompatActivity {
                 intent.putExtra("finishedTaskBundle", args);
                 startActivity(intent);
                 finishedTasks.clear();
-
-
-
-
             }
         });
 
@@ -88,6 +90,7 @@ public class MainActivity extends AppCompatActivity {
             public void onClick(View v) {
                 ToDo newtask = new ToDo(editText.getText().toString());
                 adapter.addTask(newtask);
+                dataBaseHelper.addTaskToToDoList(newtask);
                 editText.setText("");
             }
         });
@@ -95,12 +98,29 @@ public class MainActivity extends AppCompatActivity {
         deleteBtn.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
-                ArrayListHolder.addAllTasks(adapter.deleteTasks());
+//                ArrayListHolder.addAllTasks(adapter.deleteTasks());
+//
                 adapter.resetFinishedTasks();
+
+                ArrayList<DoneTask> finishedTempTasks = new ArrayList<>();
+                finishedTempTasks = adapter.deleteTasks();
+
+
+                for(int i= finishedTempTasks.size() -1; i>=0; --i) {
+                    ToDo temp = new ToDo();
+                    temp.setTask(finishedTempTasks.get(i).getTaskName());
+                    dataBaseHelper.addFinishedTaskToFinishedTaskTable(finishedTempTasks.get(i));
+                    dataBaseHelper.deleteTaskFromToDoList(temp);
+                }
+
+
+
             }
         });
 
     }
+
+
 
 
 }

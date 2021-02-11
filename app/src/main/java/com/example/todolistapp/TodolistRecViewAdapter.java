@@ -22,9 +22,8 @@ public class TodolistRecViewAdapter extends RecyclerView.Adapter<TodolistRecView
     Context context;
     ArrayList<DoneTask> finishedTasks = new ArrayList<>();
 
-    public TodolistRecViewAdapter(Context context) {
-        this.context = context;
-    }
+
+
 
     @NonNull
     @Override
@@ -72,6 +71,8 @@ public class TodolistRecViewAdapter extends RecyclerView.Adapter<TodolistRecView
 
 
     public ArrayList<DoneTask> deleteTasks() {
+
+
 
 
         for(int i=tasks.size() -1; i>=0; --i) {
